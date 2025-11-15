@@ -9,11 +9,11 @@
         <div class="col-md-8">
             <div class="card mt-2">
                 <div class="card-body p-4">
-                    <table class="table table-borderless">
+                    <table class="table table-borderless" >
                         <tbody>
                             @foreach ($schedule_detail->question_category->questions as $question)
                             <tr id="exam{{ $question->id }}">
-                                <td width="10px" rowspan="2">{{ $question->number }}.</td>
+                                <td width="10px" rowspan="2" style="max-width:450px;">{{ $question->number }}.
                                 @if($ada !== "")
 
                                         <table>
@@ -39,9 +39,11 @@
                                             </tr>
                                         </table>
                                         <br><br>
-                                <td>{!! $question->content !!}</td>
+                               {!! $question->content !!}
                                 @else
-                                <td>{!! $question->content !!}</td>
+                                
+									{!! $question->content !!}
+								</td>
                                 @endif
 
                             </tr>

@@ -92,8 +92,14 @@ class ScheduleDetail extends Model
 
         $count_question = $this->question_category->questions->count();
         $correct_answer = $this->getCorrectAnswerAttribute();
+		
+		if ($count_question != 0) {
+			$count = ($correct_answer * 100) / $count_question;
+		} else {
+			$count = 0; // or handle it in another way
+		}
 
-        $count = ($correct_answer * 100) / $count_question;
+        //$count = ($correct_answer * 100) / $count_question;
 
         return $count;
     }
