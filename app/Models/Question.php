@@ -16,6 +16,7 @@ class Question extends Model
         'aspect_id',
         'number',
         'content',
+        'group_number',
     ];
 
     public function question_details()

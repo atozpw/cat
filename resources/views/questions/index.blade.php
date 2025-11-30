@@ -19,6 +19,7 @@
                             <tr>
                                 <th>Kategori Soal</th>
                                 <th>Waktu Pengerjaan</th>
+                                <th>Jenis Soal</th>
                                 <th>Jumlah Soal</th>
                                 <th width="220px">Opsi</th>
                             </tr>
@@ -28,6 +29,7 @@
                             <tr>
                                 <td>{{ $questioncategory->name }}</td>
                                 <td>{{ $questioncategory->duration }}</td>
+                                <td>{{ $questioncategory->group->name ?? '-' }}</td>
                                 <td>{{ $questioncategory->question_count }}</td>
                                 <td>
                                     <a href="{{ route('questioncategories.show', [$questioncategory->id]) }}" class="btn btn-info btn-sm">Mata Soal</a>
@@ -41,7 +43,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center">Tidak ada data</td>
+                                <td colspan="5" class="text-center">Tidak ada data</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -69,6 +71,15 @@
                     <div class="form-group mb-3">
                         <label>Waktu Pengerjaan</label>
                         <input type="time" name="duration" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Jenis Soal</label>
+                        <select name="question_group_id" class="form-select">
+                            <option value="">Pilih Jenis Soal</option>
+                            @foreach ($questiongroups as $group)
+                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -98,6 +109,15 @@
                         <label>Waktu Pengerjaan</label>
                         <input id="category_duration" type="time" name="duration" class="form-control">
                     </div>
+                    <div class="form-group mb-3">
+                        <label>Jenis Soal</label>
+                        <select id="category_question_group_id" name="question_group_id" class="form-select">
+                            <option value="">Pilih Jenis Soal</option>
+                            @foreach ($questiongroups as $group)
+                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -119,6 +139,7 @@ $(document).ready(function () {
         $.get('/questioncategories/' + id, function (data) {
             $('#category_name').val(data.name);
             $('#category_duration').val(data.duration);
+            $('#category_question_group_id').val(data.question_group_id);
         })
     });
 })
@@ -133,5 +154,5 @@ function confirmDelete(value){
         return true
     }
 }
-</script>    
+</script>
 @endpush

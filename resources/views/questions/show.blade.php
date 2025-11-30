@@ -14,10 +14,11 @@
         <div class="col-md-12">
             <div class="card mt-2">
                 <div class="card-body">
+                    @if ($question_category->question_group_id < 3)
                     <nav>
                         <div class="nav nav-tabs mb-3">
                             <a href="?page=create" class="nav-link btn @if($page == 'create' || $page == 'edit') active @endif">
-                                @if ($page == 'edit') 
+                                @if ($page == 'edit')
                                 Edit Mata Soal
                                 @else
                                 Buat Mata Soal Baru
@@ -57,7 +58,7 @@
                                     <div class="col-md-2 form-group mb-2">
                                         <input type="text" name="sequence[]" class="form-control" value="a">
                                         <div class="form-check form-check-inline mt-2">
-                                            @php 
+                                            @php
                                             $isCheckedA = '';
                                             if ($page == 'edit') {
                                                 if (!empty($question->question_details[0])) {
@@ -81,7 +82,7 @@
                                     <div class="col-md-2 form-group mb-2">
                                         <input type="text" name="sequence[]" class="form-control" value="b">
                                         <div class="form-check form-check-inline mt-2">
-                                            @php 
+                                            @php
                                             $isCheckedB = '';
                                             if ($page == 'edit') {
                                                 if (!empty($question->question_details[1])) {
@@ -105,7 +106,7 @@
                                     <div class="col-md-2 form-group mb-2">
                                         <input type="text" name="sequence[]" class="form-control" value="c">
                                         <div class="form-check form-check-inline mt-2">
-                                            @php 
+                                            @php
                                             $isCheckedC = '';
                                             if ($page == 'edit') {
                                                 if (!empty($question->question_details[2])) {
@@ -129,7 +130,7 @@
                                     <div class="col-md-2 form-group mb-2">
                                         <input type="text" name="sequence[]" class="form-control" value="d">
                                         <div class="form-check form-check-inline mt-2">
-                                            @php 
+                                            @php
                                             $isCheckedD = '';
                                             if ($page == 'edit') {
                                                 if (!empty($question->question_details[3])) {
@@ -153,7 +154,7 @@
                                     <div class="col-md-2 form-group mb-2">
                                         <input type="text" name="sequence[]" class="form-control" value="e">
                                         <div class="form-check form-check-inline mt-2">
-                                            @php 
+                                            @php
                                             $isCheckedE = '';
                                             if ($page == 'edit') {
                                                 if (!empty($question->question_details[4])) {
@@ -215,7 +216,7 @@
                                                             @endif
                                                         </td>
                                                         <td width="10px">{{ $question_detail->sequence }}.</td>
-                                                        <td>{!! $question_detail->choice !!}</td> 
+                                                        <td>{!! $question_detail->choice !!}</td>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
@@ -228,6 +229,114 @@
                         </div>
                         @endif
                     </div>
+                    @else
+                    <nav>
+                        <div class="nav nav-tabs mb-3">
+                            <a href="?page=generate" class="nav-link btn @if($page == 'generate') active @endif">Generate</a>
+                            <a href="?page=soal-1" class="nav-link btn @if($page == 'soal-1') active @endif">Soal ke-1</a>
+                            <a href="?page=soal-2" class="nav-link btn @if($page == 'soal-2') active @endif">Soal ke-2</a>
+                            <a href="?page=soal-3" class="nav-link btn @if($page == 'soal-3') active @endif">Soal ke-3</a>
+                            <a href="?page=soal-4" class="nav-link btn @if($page == 'soal-4') active @endif">Soal ke-4</a>
+                            <a href="?page=soal-5" class="nav-link btn @if($page == 'soal-5') active @endif">Soal ke-5</a>
+                            <a href="?page=soal-6" class="nav-link btn @if($page == 'soal-6') active @endif">Soal ke-6</a>
+                            <a href="?page=soal-7" class="nav-link btn @if($page == 'soal-7') active @endif">Soal ke-7</a>
+                            <a href="?page=soal-8" class="nav-link btn @if($page == 'soal-8') active @endif">Soal ke-8</a>
+                            <a href="?page=soal-9" class="nav-link btn @if($page == 'soal-9') active @endif">Soal ke-9</a>
+                            <a href="?page=soal-10" class="nav-link btn @if($page == 'soal-10') active @endif">Soal ke-10</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content">
+                        @if ($page == 'generate')
+                        <div class="tab-pane active">
+                            <form action="{{ route('questions.generate') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="question_category_id" value="{{ $question_category_id }}">
+                                <div class="row">
+                                    <div class="mb-2 row">
+                                        <label class="col-md-2 col-form-label">Untuk Soal ke-</label>
+                                        <div class="col-md-10">
+                                            <select name="group_number" class="form-select">
+                                                @for ($i = 1; $i <= 10; $i++)
+                                                    <option value="{{ $i }}">Soal ke-{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="col-md-2 form-group mb-2">
+                                        <input type="text" name="sequence[]" class="form-control" value="a">
+                                    </div>
+                                    <div class="col-md-10 form-group mb-2">
+                                        <textarea id="ckeditor1" name="choice[]" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-md-2 form-group mb-2">
+                                        <input type="text" name="sequence[]" class="form-control" value="b">
+                                    </div>
+                                    <div class="col-md-10 form-group mb-2">
+                                        <textarea id="ckeditor2" name="choice[]" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-md-2 form-group mb-2">
+                                        <input type="text" name="sequence[]" class="form-control" value="c">
+                                    </div>
+                                    <div class="col-md-10 form-group mb-2">
+                                        <textarea id="ckeditor3" name="choice[]" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-md-2 form-group mb-2">
+                                        <input type="text" name="sequence[]" class="form-control" value="d">
+                                    </div>
+                                    <div class="col-md-10 form-group mb-2">
+                                        <textarea id="ckeditor4" name="choice[]" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-md-2 form-group mb-2">
+                                        <input type="text" name="sequence[]" class="form-control" value="e">
+                                    </div>
+                                    <div class="col-md-10 form-group mb-2">
+                                        <textarea id="ckeditor5" name="choice[]" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-md-10 offset-md-2 mt-2">
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary btn-lg">Generate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        @else
+                        <div class="tab-pane active">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    @foreach ($questions as $question)
+                                    <tr>
+                                        <td width="10px" rowspan="2">{{ $question->number }}.</td>
+                                        <td>{!! $question->content !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-0">
+                                            <table class="table table-borderless table-sm">
+                                                <tbody>
+                                                    @foreach ($question->question_details as $question_detail)
+                                                    <tr>
+                                                        <td width="25px" class="text-success">
+                                                            @if ($question_detail->is_answer == 1)
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                                            </svg>
+                                                            @endif
+                                                        </td>
+                                                        <td width="10px">{{ $question_detail->sequence }}.</td>
+                                                        <td>{!! $question_detail->choice !!}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
@@ -236,7 +345,7 @@
 @endsection
 
 @push('script')
-@if ($page == 'create' || $page == 'edit')
+@if ($page == 'create' || $page == 'edit' || $page == 'generate')
 <script src="{{ asset('vendor/ckeditor5-build-classic/ckeditor.js') }}"></script>
 <script>
 class MyUploadAdapter {
@@ -313,8 +422,10 @@ function MyCustomUploadAdapterPlugin(editor) {
     let editor4;
     let editor5;
 
+    @if ($question_category->question_group_id < 3)
     ClassicEditor.create(document.querySelector('#ckeditor0'), {extraPlugins: [MyCustomUploadAdapterPlugin]})
         .then(editor => { editor0 = editor }).catch(error => { alert(error) });
+    @endif
 
     ClassicEditor.create(document.querySelector('#ckeditor1'), {extraPlugins: [MyCustomUploadAdapterPlugin]})
         .then(editor => { editor1 = editor }).catch(error => { alert(error) });
@@ -333,7 +444,7 @@ function MyCustomUploadAdapterPlugin(editor) {
 
     function getAnswerPreviousQuestion() {
         var question_category_id = $('input[name="question_category_id"]').val();
-        $.post("{{ route('questioncategories.get_answer_previous_question') }}", { 
+        $.post("{{ route('questioncategories.get_answer_previous_question') }}", {
             _token: csrf_token,
             question_category_id: question_category_id
         },

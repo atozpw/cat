@@ -6,14 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\QuestionCategory;
 use App\Models\Question;
 use App\Models\QuestionDetail;
+use App\Models\QuestionGroup;
 
 class QuestionCategoryController extends Controller
 {
     public function index()
     {
-        $questioncategories = QuestionCategory::orderBy('created_at', 'desc')->paginate(20);
+        $questioncategories = QuestionCategory::with('group')->orderBy('created_at', 'desc')->paginate(20);
+        $questiongroups = QuestionGroup::all();
 
-        return view('questions.index', compact('questioncategories'));
+        return view('questions.index', compact('questioncategories', 'questiongroups'));
     }
 
     public function store(Request $request)
@@ -34,21 +36,31 @@ class QuestionCategoryController extends Controller
         $question_category_id = $id;
         $question_category = QuestionCategory::find($question_category_id);
 
-        $page = isset($request->page) ? $request->page : 'create';
+        if ($question_category->question_group_id < 3) {
+            $page = isset($request->page) ? $request->page : 'create';
 
-        if ($page == 'list') {
-            $questions = Question::where('question_category_id', $question_category_id)->orderBy('number')->get();
-        }
-        elseif ($page == 'edit') {
-            $question_id = $request->id;
-            $question = Question::find($question_id);
-            $sequence = $question->number;
+            if ($page == 'list') {
+                $questions = Question::where('question_category_id', $question_category_id)->orderBy('number')->get();
+            }
+            elseif ($page == 'edit') {
+                $question_id = $request->id;
+                $question = Question::find($question_id);
+                $sequence = $question->number;
+            }
+            else {
+                $number = Question::where('question_category_id', $question_category_id)->max('number');
+                $sequence = empty($number) ? 1 : $number + 1;
+            }
         }
         else {
-            $number = Question::where('question_category_id', $question_category_id)->max('number');
-            $sequence = empty($number) ? 1 : $number + 1;
+            $page = isset($request->page) ? $request->page : 'generate';
+
+            if ($page != 'generate') {
+                $group_number = explode('-', $page)[1];
+                $questions = Question::where('question_category_id', $question_category_id)->where('group_number', $group_number)->orderBy('number')->get();
+            }
         }
-        
+
         return view('questions.show', compact('sequence', 'question_category_id', 'questions', 'page', 'question_category', 'question'));
     }
 

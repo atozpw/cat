@@ -124,6 +124,10 @@ Route::post('/questions/image_upload', [QuestionController::class, 'image_upload
     ->middleware('auth')
     ->name('upload');
 
+Route::post('/questions/generate', [QuestionController::class, 'generate'])
+    ->middleware('auth')
+    ->name('questions.generate');
+
 // Schedule Route
 
 Route::get('/schedules', [ScheduleController::class, 'index'])

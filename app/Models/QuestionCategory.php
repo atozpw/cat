@@ -14,6 +14,7 @@ class QuestionCategory extends Model
     protected $fillable = [
         'name',
         'duration',
+        'question_group_id',
     ];
 
     public function getQuestionCountAttribute($value)
@@ -24,5 +25,10 @@ class QuestionCategory extends Model
     public function questions()
     {
         return $this->hasMany(Question::class)->orderBy('number');
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(QuestionGroup::class, 'question_group_id');
     }
 }

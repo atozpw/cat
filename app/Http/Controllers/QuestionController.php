@@ -104,7 +104,7 @@ class QuestionController extends Controller
             $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
             $extension = $request->file('upload')->getClientOriginalExtension();
             $filenametostore = $filename.'_'.time().'.'.$extension;
-            
+
             $request->file('upload')->storeAs('public/uploads', $filenametostore);
             $request->file('upload')->storeAs('public/uploads/thumbnail', $filenametostore);
 
@@ -119,5 +119,56 @@ class QuestionController extends Controller
                 '500' => asset('storage/uploads/thumbnail/'.$filenametostore)
             ]);
         }
+    }
+
+    public function generate(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            Question::where('group_number', $request->group_number)->delete();
+
+            $choice = $request->choice;
+            $sequence = $request->sequence;
+
+            for ($i = 1; $i <= 50; $i++) {
+                $shuffled = $choice;
+                shuffle($shuffled);
+
+                $picked = array_slice($shuffled, 0, 4);
+
+                $missingValue = array_values(array_diff($choice, $picked))[0];
+
+                $missingIndex = array_search($missingValue, $choice);
+
+                $question = Question::create([
+                    'question_category_id' => $request->question_category_id,
+                    'number' => $i,
+                    'content' => '<p>' . strip_tags(implode(' ', $picked)) . '</p>',
+                    'group_number' => $request->group_number,
+                ]);
+
+                for ($j = 0; $j < count($choice); $j++) {
+                    $is_answer = ($j == $missingIndex) ? 1 : 0;
+                    QuestionDetail::create([
+                        'question_id' => $question->id,
+                        'sequence' => $sequence[$j],
+                        'choice' => $choice[$j],
+                        'is_answer' => $is_answer,
+                    ]);
+                }
+            }
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            toastr()->error('Terjadi kesalahan pada sistem.');
+
+            return redirect()->back();
+        }
+
+        DB::commit();
+        toastr()->success('Mata Soal baru berhasil digenerate.');
+
+        return redirect()->back();
     }
 }
