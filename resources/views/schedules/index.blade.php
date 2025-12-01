@@ -30,8 +30,8 @@
                                 <td>{{ date('d/m/Y', strtotime($schedule->date)) }}</td>
                                 <td>
                                     @foreach ($schedule->schedule_details as $schedule_detail)
-                                    <div>{{ $schedule_detail->question_category->name }}</div>
-                                    @endforeach    
+                                    <div>{{ $schedule_detail->question_category->group->name ?? '' }}: {{ $schedule_detail->question_category->name }}</div>
+                                    @endforeach
                                 </td>
                                 <td>
                                     {{-- <a class="btn btn-warning btn-sm" id="editSchedule" data-bs-toggle="modal" data-bs-target="#modalEdit" data-id="{{ $schedule->id }}">Edit</a> --}}
@@ -78,7 +78,34 @@
                         <label>Tanggal Pengerjaan</label>
                         <input type="date" name="date" class="form-control">
                     </div>
-                    <hr>
+                    <div class="form-group mb-3">
+                        <label>Soal Kecerdasan</label>
+                        <select name="question_category_id_1" class="select-question">
+                            <option value="">Pilih Soal</option>
+                            @foreach ($questions1 as $question)
+                            <option value="{{ $question->id }}">{{ $question->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Soal Kepribadian</label>
+                        <select name="question_category_id_2" class="select-question">
+                            <option value="">Pilih Soal</option>
+                            @foreach ($questions2 as $question)
+                            <option value="{{ $question->id }}">{{ $question->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Soal Kecermatan</label>
+                        <select name="question_category_id_3" class="select-question">
+                            <option value="">Pilih Soal</option>
+                            @foreach ($questions3 as $question)
+                            <option value="{{ $question->id }}">{{ $question->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    {{-- <hr>
                     <div class="form-group mb-3">
                         <label class="h5">Soal</label>
                         <div>
@@ -109,7 +136,7 @@
                                 </svg>
                             </button>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -230,36 +257,36 @@ function deleteRow(i) {
     return false
 }
 
-function addRow() {
-    $('#rowAddQuestion').append(
-        '<div id="rowAddQuestionItem' + rowIndex + '" class="row mb-2">' +
-            '<div class="col-md-10">' +
-                '<select name="question_category_id[]" class="select-question">' +
-                    '<option value="">Pilih Soal</option>' +
-                    '@foreach ($questioncategories as $questioncategory)' +
-                    '<option value="{{ $questioncategory->id }}">{{ $questioncategory->name }}</option>' +
-                    '@endforeach' +
-                '</select>' +
-            '</div>' +
-            '<div class="col-md-2">' +
-                '<button type="button" onclick="deleteRow(' + rowIndex + ')" class="btn btn-danger">' +
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">' +
-                        '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>' +
-                        '<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>' +
-                    '</svg>' +
-                '</button>' +
-            '</div>' +
-        '</div>'
-    );
-    rowIndex++;
+// function addRow() {
+//     $('#rowAddQuestion').append(
+//         '<div id="rowAddQuestionItem' + rowIndex + '" class="row mb-2">' +
+//             '<div class="col-md-10">' +
+//                 '<select name="question_category_id[]" class="select-question">' +
+//                     '<option value="">Pilih Soal</option>' +
+//                     '@foreach ($questions1 as $questioncategory)' +
+//                     '<option value="{{ $questioncategory->id }}">{{ $questioncategory->name }}</option>' +
+//                     '@endforeach' +
+//                 '</select>' +
+//             '</div>' +
+//             '<div class="col-md-2">' +
+//                 '<button type="button" onclick="deleteRow(' + rowIndex + ')" class="btn btn-danger">' +
+//                     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">' +
+//                         '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>' +
+//                         '<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>' +
+//                     '</svg>' +
+//                 '</button>' +
+//             '</div>' +
+//         '</div>'
+//     );
+//     rowIndex++;
 
-    $('.select-question').select2({
-        placeholder: 'Pilih Soal',
-        dropdownParent: $('#modalAddNew'),
-        width: '100%'
-    });
-        
-    return false;
-}
-</script>    
+//     $('.select-question').select2({
+//         placeholder: 'Pilih Soal',
+//         dropdownParent: $('#modalAddNew'),
+//         width: '100%'
+//     });
+
+//     return false;
+// }
+</script>
 @endpush
